@@ -1,5 +1,3 @@
-// ==================== MY FOOD PYRAMID ====================
-
 let selectedEmoji = null;
 let foodsOnPyramid = [];
 let history = [];
@@ -8,13 +6,14 @@ let historyIndex = -1;
 const foods = {
   carb: ["🍚","🍝","🍜","🥟","🍞","🥐"],
   protein: ["🍗","🥩","🐖","🐟","🍤","🥚","🍖"],
-  veg: ["🥦","🥬","🥕","🍎","🍊","🍌","🍅","🥑"]
+  veg: ["🥦","🥬","🥕","🍎","🍊","🍌","🍅","🥑"],
+  others: ["🍦","🍰","🍩","🍫","🥤","☕","🍵","🍔","🍟","🍕","🍪","🧁"]   // New category
 };
 
-// Populate food palette
 function populateFoods() {
   Object.keys(foods).forEach(key => {
     const container = document.getElementById(key);
+    if (!container) return;
     container.innerHTML = '';
     
     foods[key].forEach(emoji => {
@@ -27,27 +26,22 @@ function populateFoods() {
   });
 }
 
-// Select food from palette
 function selectEmoji(emoji, element) {
   document.querySelectorAll('.food-item').forEach(el => el.classList.remove('selected'));
   element.classList.add('selected');
   selectedEmoji = emoji;
 }
 
-// Tap on pyramid to place food
 function setupPyramidTap() {
   const container = document.getElementById('pyramidContainer');
-  
   container.addEventListener('click', (e) => {
     if (!selectedEmoji) {
       alert("Please tap a food from the left first!");
       return;
     }
-
     const rect = container.getBoundingClientRect();
     const x = e.clientX - rect.left - 22;
     const y = e.clientY - rect.top - 22;
-
     addFood(selectedEmoji, x, y);
   });
 }
@@ -107,7 +101,6 @@ function makeDraggable(el) {
   });
 }
 
-// History System
 function saveHistory() {
   const state = foodsOnPyramid.map(food => ({
     emoji: food.textContent,
@@ -134,10 +127,8 @@ window.redo = () => {
 function restoreHistory() {
   foodsOnPyramid.forEach(f => f.remove());
   foodsOnPyramid = [];
-
   const state = history[historyIndex];
   const container = document.getElementById('pyramidContainer');
-
   state.forEach(item => {
     const el = document.createElement('div');
     el.style.position = 'absolute';
@@ -173,7 +164,6 @@ window.saveAsImage = async () => {
   }
 };
 
-// Initialize everything
 window.onload = () => {
   populateFoods();
   setupPyramidTap();
