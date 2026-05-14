@@ -7,62 +7,30 @@
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   
   <style>
-    body {
-      margin: 0; padding: 0; font-family: Arial, sans-serif;
-      background: linear-gradient(#e8f5e9, #c8e6c8);
-    }
-    h1 { 
-      text-align: center; 
-      color: #1b5e20; 
-      margin: 15px 0 10px;
-      font-size: 26px;
-    }
+    body { margin:0; padding:0; font-family: Arial, sans-serif; background: linear-gradient(#e8f5e9, #c8e6c8); }
+    h1 { text-align:center; color:#1b5e20; margin:15px 0 10px; font-size:26px; }
 
     .main {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 25px;
-      padding: 15px;
-      max-width: 1100px;
-      margin: 0 auto;
+      display:flex; flex-wrap:wrap; justify-content:center; gap:25px; padding:15px; max-width:1100px; margin:0 auto;
     }
 
     .food-palette {
-      background: white; padding: 20px; border-radius: 16px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.15); width: 380px;
+      background:white; padding:20px; border-radius:16px; box-shadow:0 4px 15px rgba(0,0,0,0.15); width:380px;
     }
-    .category h3 { margin: 12px 0 10px; color: #2e7d32; text-align: center; }
-    .foods { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
+    .category h3 { margin:12px 0 10px; color:#2e7d32; text-align:center; }
+    .foods { display:flex; flex-wrap:wrap; gap:16px; justify-content:center; }
 
     .food-item {
-      font-size: 46px; 
-      cursor: pointer; 
-      padding: 8px; 
-      border-radius: 12px;
-      transition: 0.2s;
+      font-size:46px; cursor:pointer; padding:8px; border-radius:12px;
     }
-    .food-item.selected { background: #c8e6c8; transform: scale(1.15); }
+    .food-item.selected { background:#c8e6c8; transform:scale(1.15); }
 
     .pyramid-area {
-      position: relative;
-      width: 520px;
-      height: 580px;
+      position:relative; width:520px; height:580px;
     }
 
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-    }
-    button {
-      padding: 12px 20px;
-      font-size: 16px;
-      background: #2e7d32;
-      color: white;
-      border: none;
-      border-radius: 8px;
+    .controls button {
+      padding:12px 20px; margin:5px; font-size:16px; background:#2e7d32; color:white; border:none; border-radius:8px;
     }
   </style>
 </head>
@@ -84,11 +52,7 @@
           <line x1="195" y1="392" x2="325" y2="392" stroke="#1b5e20" stroke-width="6"/>
         </svg>
         
-        <div id="pyramidContainer" style="position:absolute; width:520px; height:580px; top:0; left:0;">
-          <div style="position:absolute; left:50%; transform:translateX(-50%); top:105px; font-weight:bold; color:#1b5e20; font-size:17px; z-index:100; text-shadow:0 2px 6px white;">Eat Most</div>
-          <div style="position:absolute; left:50%; transform:translateX(-50%); top:255px; font-weight:bold; color:#1b5e20; font-size:17px; z-index:100; text-shadow:0 2px 6px white;">Eat Moderately</div>
-          <div style="position:absolute; left:50%; transform:translateX(-50%); top:405px; font-weight:bold; color:#1b5e20; font-size:17px; z-index:100; text-shadow:0 2px 6px white;">Eat Least</div>
-        </div>
+        <div id="pyramidContainer" style="position:absolute; width:520px; height:580px; top:0; left:0;"></div>
       </div>
 
       <div class="controls">
