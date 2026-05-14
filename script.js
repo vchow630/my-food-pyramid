@@ -98,7 +98,6 @@ function makeDraggable(el) {
   });
 }
 
-// ==================== UNDO / REDO ====================
 function saveHistory() {
   const state = foodsOnPyramid.map(food => ({
     emoji: food.textContent,
@@ -107,8 +106,20 @@ function saveHistory() {
   }));
   history = history.slice(0, historyIndex + 1);
   history.push(state);
-  historyIndex = Math.min(historyIndex + 1, history.length - 1);
+  historyIndex++;
 }
+
+window.undo = () => {
+  if (historyIndex <= 0) return;
+  historyIndex--;
+  restoreHistory();
+};
+
+window.redo = () => {
+  if (historyIndex >= history.length - 1) return;
+  historyIndex++;
+  restoreHistory();
+};
 
 function restoreHistory() {
   foodsOnPyramid.forEach(f => f.remove());
@@ -129,18 +140,6 @@ function restoreHistory() {
     foodsOnPyramid.push(el);
   });
 }
-
-window.undo = () => {
-  if (historyIndex <= 0) return;
-  historyIndex--;
-  restoreHistory();
-};
-
-window.redo = () => {
-  if (historyIndex >= history.length - 1) return;
-  historyIndex++;
-  restoreHistory();
-};
 
 window.resetPyramid = () => {
   if (confirm("Clear everything?")) {
