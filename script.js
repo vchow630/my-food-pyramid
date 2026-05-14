@@ -150,17 +150,21 @@ window.resetPyramid = () => {
 
 window.saveAsImage = async () => {
   try {
+    // Capture the export wrapper which includes the title
     const canvas = await html2canvas(document.getElementById('export-wrapper'), { 
       scale: 2.5,
-      backgroundColor: "#ffffff"
+      backgroundColor: "#ffffff",
+      logging: false
     });
+
     const link = document.createElement('a');
     link.download = 'My_Food_Pyramid.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
+    
     alert("✅ Image saved with title!");
   } catch (e) {
-    alert("Failed to save image.");
+    alert("Failed to save image. Please try again.");
   }
 };
 
