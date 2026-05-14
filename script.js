@@ -150,7 +150,10 @@ window.resetPyramid = () => {
 
 window.saveAsImage = async () => {
   try {
-    const canvas = await html2canvas(document.querySelector('.main'), { scale: 2.5 });
+    const canvas = await html2canvas(document.getElementById('export-wrapper'), { 
+      scale: 2.5,
+      backgroundColor: "#ffffff"
+    });
     const link = document.createElement('a');
     link.download = 'My_Food_Pyramid.png';
     link.href = canvas.toDataURL('image/png');
