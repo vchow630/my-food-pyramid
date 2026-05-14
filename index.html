@@ -11,38 +11,49 @@
       margin: 0; padding: 0; font-family: Arial, sans-serif;
       background: linear-gradient(#e8f5e9, #c8e6c8);
     }
+
+    #export-wrapper {
+      background: white;
+      padding: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
     h1 { 
       text-align: center; 
       color: #1b5e20; 
-      margin: 15px 0 10px;
-      font-size: 26px;
+      margin: 10px 0 15px;
+      font-size: 28px;
     }
 
     .main {
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-      padding: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+      padding: 15px;
     }
 
     .food-palette {
-      background: white; padding: 18px; border-radius: 16px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.15); width: 100%; max-width: 400px;
+      background: white; padding: 20px; border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15); width: 380px;
     }
     .category h3 { margin: 12px 0 10px; color: #2e7d32; text-align: center; }
     .foods { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
 
     .food-item {
-      font-size: 46px; cursor: grab; padding: 8px; border-radius: 12px;
+      font-size: 46px; 
+      cursor: pointer; 
+      padding: 8px; 
+      border-radius: 12px;
+      transition: 0.2s;
     }
+    .food-item.selected { background: #c8e6c8; transform: scale(1.15); }
 
     .pyramid-area {
       position: relative;
-      width: 100%;
-      max-width: 520px;
+      width: 520px;
       height: 580px;
-      margin: 10px 0;
     }
 
     .controls {
@@ -50,7 +61,7 @@
       flex-wrap: wrap;
       gap: 10px;
       justify-content: center;
-      margin: 10px 0 30px;
+      margin-top: 20px;
     }
     button {
       padding: 12px 20px;
@@ -60,48 +71,41 @@
       border: none;
       border-radius: 8px;
     }
-
-    /* Desktop - Side by side */
-    @media (min-width: 900px) {
-      .main {
-        flex-direction: row;
-        align-items: flex-start;
-      }
-      .pyramid-area {
-        width: 520px;
-        height: 580px;
-      }
-    }
   </style>
 </head>
 <body>
-  <h1>🍽️ My Food Pyramid</h1>
-  
-  <div class="main">
-    <!-- Food Palette (on top on mobile) -->
-    <div class="food-palette">
-      <div class="category"><h3>🥖 Carbohydrates</h3><div class="foods" id="carb"></div></div>
-      <div class="category"><h3>🍗 Proteins</h3><div class="foods" id="protein"></div></div>
-      <div class="category"><h3>🥦 Vegetables & Fruits</h3><div class="foods" id="veg"></div></div>
-    </div>
+  <div id="export-wrapper">
+    <h1>🍽️ My Food Pyramid</h1>
+    
+    <div class="main">
+      <div class="food-palette">
+        <div class="category"><h3>🥖 Carbohydrates</h3><div class="foods" id="carb"></div></div>
+        <div class="category"><h3>🍗 Proteins</h3><div class="foods" id="protein"></div></div>
+        <div class="category"><h3>🥦 Vegetables & Fruits</h3><div class="foods" id="veg"></div></div>
+      </div>
 
-    <!-- Pyramid -->
-    <div class="pyramid-area" id="pyramidWrapper">
-      <svg width="520" height="580" style="position:absolute;">
-        <polygon points="60,80 460,80 260,540" fill="#ffeb3b" stroke="#1b5e20" stroke-width="16"/>
-        <line x1="135" y1="242" x2="385" y2="242" stroke="#1b5e20" stroke-width="6"/>
-        <line x1="195" y1="392" x2="325" y2="392" stroke="#1b5e20" stroke-width="6"/>
-      </svg>
-      
-      <div id="pyramidContainer" style="position:absolute; width:520px; height:580px; top:0; left:0;"></div>
-    </div>
+      <div>
+        <div class="pyramid-area" id="pyramidWrapper">
+          <svg width="520" height="580" style="position:absolute;">
+            <polygon points="60,80 460,80 260,540" fill="#ffeb3b" stroke="#1b5e20" stroke-width="16"/>
+            <line x1="135" y1="242" x2="385" y2="242" stroke="#1b5e20" stroke-width="6"/>
+            <line x1="195" y1="392" x2="325" y2="392" stroke="#1b5e20" stroke-width="6"/>
+          </svg>
+          
+          <div id="pyramidContainer" style="position:absolute; width:520px; height:580px; top:0; left:0;">
+            <div style="position:absolute; left:50%; transform:translateX(-50%); top:105px; font-weight:bold; color:#1b5e20; font-size:17px; z-index:100; text-shadow:0 2px 6px white;">Eat Most</div>
+            <div style="position:absolute; left:50%; transform:translateX(-50%); top:255px; font-weight:bold; color:#1b5e20; font-size:17px; z-index:100; text-shadow:0 2px 6px white;">Eat Moderately</div>
+            <div style="position:absolute; left:50%; transform:translateX(-50%); top:405px; font-weight:bold; color:#1b5e20; font-size:17px; z-index:100; text-shadow:0 2px 6px white;">Eat Least</div>
+          </div>
+        </div>
 
-    <!-- Buttons -->
-    <div class="controls">
-      <button onclick="undo()">↩️ Undo</button>
-      <button onclick="redo()">↪️ Redo</button>
-      <button onclick="resetPyramid()">Reset All</button>
-      <button onclick="saveAsImage()">💾 Save Image</button>
+        <div class="controls">
+          <button onclick="undo()">↩️ Undo</button>
+          <button onclick="redo()">↪️ Redo</button>
+          <button onclick="resetPyramid()">Reset All</button>
+          <button onclick="saveAsImage()">💾 Save Image</button>
+        </div>
+      </div>
     </div>
   </div>
 
