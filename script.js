@@ -1,29 +1,18 @@
+let foodsOnPyramid = [];
+let history = [];
+let historyIndex = -1;
+
 const foods = {
   carb: ["🍚","🍝","🍜","🥟","🍞","🥐"],
   protein: ["🍗","🥩","🐖","🐟","🍤","🥚","🍖"],
   veg: ["🥦","🥬","🥕","🍎","🍊","🍌","🍅","🥑"]
 };
 
-let foodsOnPyramid = [];
-let history = [];
-let historyIndex = -1;
-
-function saveHistory() {
-  const state = foodsOnPyramid.map(food => ({
-    emoji: food.textContent,
-    left: food.style.left,
-    top: food.style.top
-  }));
-  history = history.slice(0, historyIndex + 1);
-  history.push([...state]);
-  historyIndex++;
-}
-
 function populateFoods() {
-  Object.keys(foods).forEach(cat => {
-    const container = document.getElementById(cat);
+  Object.keys(foods).forEach(key => {
+    const container = document.getElementById(key);
     container.innerHTML = '';
-    foods[cat].forEach(emoji => {
+    foods[key].forEach(emoji => {
       const div = document.createElement('div');
       div.className = 'food-item';
       div.draggable = true;
@@ -37,20 +26,14 @@ function populateFoods() {
 function setupDrop() {
   const container = document.getElementById('pyramidContainer');
   container.addEventListener('dragover', e => e.preventDefault());
-  
   container.addEventListener('drop', e => {
     e.preventDefault();
     const emoji = e.dataTransfer.getData('text/plain');
-    if (!emoji) return;
-    
-    const food = createFood(emoji, e);
-    container.appendChild(food);
-    foodsOnPyramid.push(food);
-    saveHistory();
+    if (emoji) addFood(emoji, e);
   });
 }
 
-function createFood(emoji, e) {
+function addFood(emoji, e) {
   const el = document.createElement('div');
   el.style.position = 'absolute';
   el.style.fontSize = '44px';
@@ -62,43 +45,45 @@ function createFood(emoji, e) {
   let x = e.clientX - rect.left - 22;
   let y = e.clientY - rect.top - 22;
 
-  x = Math.max(30, Math.min(x, 520));
-  y = Math.max(30, Math.min(y, 580));
+  x = Math.max(30, Math.min(x, 480));
+  y = Math.max(30, Math.min(y, 520));
 
   el.style.left = x + 'px';
   el.style.top = y + 'px';
 
   makeDraggable(el);
-  return el;
+  document.getElementById('pyramidContainer').appendChild(el);
+  foodsOnPyramid.push(el);
+  saveHistory();
 }
 
 function makeDraggable(el) {
   let isDragging = false, offsetX, offsetY;
 
-  const start = (e) => {
+  el.addEventListener('mousedown', start);
+  el.addEventListener('touchstart', start);
+
+  function start(e) {
     isDragging = true;
     const r = el.getBoundingClientRect();
     offsetX = (e.clientX || e.touches[0].clientX) - r.left;
     offsetY = (e.clientY || e.touches[0].clientY) - r.top;
     el.style.zIndex = 200;
-  };
+  }
 
-  el.addEventListener('mousedown', start);
-  el.addEventListener('touchstart', start);
-
-  const move = (e) => {
+  function move(e) {
     if (!isDragging) return;
     const clientX = e.clientX || e.touches[0].clientX;
     const clientY = e.clientY || e.touches[0].clientY;
     let newX = clientX - offsetX;
     let newY = clientY - offsetY;
 
-    newX = Math.max(20, Math.min(newX, 520));
-    newY = Math.max(20, Math.min(newY, 580));
+    newX = Math.max(20, Math.min(newX, 480));
+    newY = Math.max(20, Math.min(newY, 520));
 
     el.style.left = newX + 'px';
     el.style.top = newY + 'px';
-  };
+  }
 
   document.addEventListener('mousemove', move);
   document.addEventListener('touchmove', move);
@@ -113,20 +98,30 @@ function makeDraggable(el) {
   });
 }
 
-// Undo & Redo (Single Step)
+function saveHistory() {
+  const state = foodsOnPyramid.map(food => ({
+    emoji: food.textContent,
+    left: food.style.left,
+    top: food.style.top
+  }));
+  history = history.slice(0, historyIndex + 1);
+  history.push(state);
+  historyIndex++;
+}
+
 window.undo = () => {
   if (historyIndex <= 0) return;
   historyIndex--;
-  restoreState();
+  restoreHistory();
 };
 
 window.redo = () => {
   if (historyIndex >= history.length - 1) return;
   historyIndex++;
-  restoreState();
+  restoreHistory();
 };
 
-function restoreState() {
+function restoreHistory() {
   foodsOnPyramid.forEach(f => f.remove());
   foodsOnPyramid = [];
 
@@ -157,15 +152,25 @@ window.resetPyramid = () => {
 
 window.saveAsImage = async () => {
   try {
-    const container = document.getElementById('pyramidWrapper');
-    const canvas = await html2canvas(container, { scale: 2.5 });
+    // Capture the whole page area including the title
+    const captureArea = document.body;   // or document.querySelector('.main') if you prefer
+    
+    const canvas = await html2canvas(captureArea, {
+      scale: 2.2,                    // Higher quality
+      backgroundColor: "#f0f7f0",
+      logging: false,
+      useCORS: true,
+      allowTaint: true
+    });
+
     const link = document.createElement('a');
     link.download = 'My_Food_Pyramid.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
-    alert("✅ Image saved successfully!");
+    
+    alert("✅ Image saved with title!");
   } catch (e) {
-    alert("Failed to save image.");
+    alert("Failed to save image. Please try again.");
   }
 };
 
