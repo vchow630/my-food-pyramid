@@ -24,7 +24,7 @@
       justify-content: center;
       gap: 30px;
       padding: 20px;
-      max-width: 1200px;
+      max-width: 1300px;
       margin: 0 auto;
     }
 
@@ -41,15 +41,15 @@
 
     .pyramid-area {
       position: relative;
-      width: 520px;
-      height: 580px;
+      width: 780px;
+      height: 870px;
     }
 
     .controls {
       display: flex;
       flex-direction: column;
       gap: 12px;
-      margin-top: 40px;
+      margin-top: 60px;
     }
     button {
       padding: 14px 24px;
@@ -59,33 +59,42 @@
       border: none;
       border-radius: 8px;
     }
+
+    @media (max-width: 900px) {
+      .main { flex-direction: column; align-items: center; }
+      .pyramid-area { width: 100%; max-width: 520px; height: auto; }
+    }
   </style>
 </head>
 <body>
   <h1>🍽️ My Food Pyramid</h1>
   
   <div class="main">
+    <!-- Food Palette -->
     <div class="food-palette">
       <div class="category"><h3>🥖 Carbohydrates</h3><div class="foods" id="carb"></div></div>
       <div class="category"><h3>🍗 Proteins</h3><div class="foods" id="protein"></div></div>
       <div class="category"><h3>🥦 Vegetables & Fruits</h3><div class="foods" id="veg"></div></div>
     </div>
 
+    <!-- Enlarged Pyramid -->
     <div>
-<div class="pyramid-area" id="pyramidWrapper">
-  <svg width="520" height="580" style="position:absolute;">
-    <polygon points="60,80 460,80 260,540" fill="#ffeb3b" stroke="#1b5e20" stroke-width="16"/>
-    <line x1="135" y1="242" x2="385" y2="242" stroke="#1b5e20" stroke-width="6"/>
-    <line x1="195" y1="392" x2="325" y2="392" stroke="#1b5e20" stroke-width="6"/>
-  </svg>
-  
-  <div id="pyramidContainer" style="position:absolute; width:520px; height:580px; top:0; left:0;">
-    <div style="position:absolute; left:50%; transform:translateX(-50%); top:118px; font-weight:bold; color:#1b5e20; font-size:17px; z-index:100; text-shadow:0 2px 6px white;">Eat Most</div>
-    <div style="position:absolute; left:50%; transform:translateX(-50%); top:255px; font-weight:bold; color:#1b5e20; font-size:17px; z-index:100; text-shadow:0 2px 6px white;">Eat Moderately</div>
-    <div style="position:absolute; left:50%; transform:translateX(-50%); top:402px; font-weight:bold; color:#1b5e20; font-size:17px; z-index:100; text-shadow:0 2px 6px white;">Eat Least</div>
-  </div>
-</div>       
-      
+      <div class="pyramid-area" id="pyramidWrapper">
+        <svg width="780" height="870" style="position:absolute;">
+          <!-- 1.5x Enlarged Inverted Triangle -->
+          <polygon points="90,120 690,120 390,810" fill="#ffeb3b" stroke="#1b5e20" stroke-width="24"/>
+          
+          <!-- Properly fitted dividing lines -->
+          <line x1="195" y1="365" x2="585" y2="365" stroke="#1b5e20" stroke-width="9"/>
+          <line x1="255" y1="590" x2="525" y2="590" stroke="#1b5e20" stroke-width="9"/>
+        </svg>
+        
+        <div id="pyramidContainer" style="position:absolute; width:780px; height:870px; top:0; left:0;">
+          <div style="position:absolute; left:50%; transform:translateX(-50%); top:175px; font-weight:bold; color:#1b5e20; font-size:22px; z-index:100; text-shadow:0 2px 8px white;">Eat Most</div>
+          <div style="position:absolute; left:50%; transform:translateX(-50%); top:395px; font-weight:bold; color:#1b5e20; font-size:22px; z-index:100; text-shadow:0 2px 8px white;">Eat Moderately</div>
+          <div style="position:absolute; left:50%; transform:translateX(-50%); top:620px; font-weight:bold; color:#1b5e20; font-size:22px; z-index:100; text-shadow:0 2px 8px white;">Eat Least</div>
+        </div>
+      </div>
 
       <div class="controls">
         <button onclick="undo()">↩️ Undo</button>
