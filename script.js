@@ -1,3 +1,4 @@
+let selectedEmoji = null;
 let foodsOnPyramid = [];
 let history = [];
 let historyIndex = -1;
@@ -15,41 +16,42 @@ function populateFoods() {
     foods[key].forEach(emoji => {
       const div = document.createElement('div');
       div.className = 'food-item';
-      div.draggable = true;
       div.textContent = emoji;
-      div.addEventListener('dragstart', e => e.dataTransfer.setData('text/plain', emoji));
+      div.onclick = () => selectEmoji(emoji, div);
       container.appendChild(div);
     });
   });
 }
 
-function setupDrop() {
+function selectEmoji(emoji, element) {
+  document.querySelectorAll('.food-item').forEach(el => el.classList.remove('selected'));
+  element.classList.add('selected');
+  selectedEmoji = emoji;
+}
+
+function setupPyramidTap() {
   const container = document.getElementById('pyramidContainer');
-  container.addEventListener('dragover', e => e.preventDefault());
-  container.addEventListener('drop', e => {
-    e.preventDefault();
-    const emoji = e.dataTransfer.getData('text/plain');
-    if (emoji) addFood(emoji, e);
+  container.addEventListener('click', (e) => {
+    if (!selectedEmoji) {
+      alert("Please tap a food from the left first!");
+      return;
+    }
+    const rect = container.getBoundingClientRect();
+    const x = e.clientX - rect.left - 22;
+    const y = e.clientY - rect.top - 22;
+    addFood(selectedEmoji, x, y);
   });
 }
 
-function addFood(emoji, e) {
+function addFood(emoji, x, y) {
   const el = document.createElement('div');
   el.style.position = 'absolute';
   el.style.fontSize = '44px';
   el.style.cursor = 'grab';
   el.style.zIndex = '30';
   el.textContent = emoji;
-
-  const rect = document.getElementById('pyramidContainer').getBoundingClientRect();
-  let x = e.clientX - rect.left - 22;
-  let y = e.clientY - rect.top - 22;
-
-  x = Math.max(30, Math.min(x, 480));
-  y = Math.max(30, Math.min(y, 520));
-
-  el.style.left = x + 'px';
-  el.style.top = y + 'px';
+  el.style.left = Math.max(20, Math.min(x, 480)) + 'px';
+  el.style.top = Math.max(20, Math.min(y, 520)) + 'px';
 
   makeDraggable(el);
   document.getElementById('pyramidContainer').appendChild(el);
@@ -77,10 +79,8 @@ function makeDraggable(el) {
     const clientY = e.clientY || e.touches[0].clientY;
     let newX = clientX - offsetX;
     let newY = clientY - offsetY;
-
     newX = Math.max(20, Math.min(newX, 480));
     newY = Math.max(20, Math.min(newY, 520));
-
     el.style.left = newX + 'px';
     el.style.top = newY + 'px';
   }
@@ -109,25 +109,14 @@ function saveHistory() {
   historyIndex++;
 }
 
-window.undo = () => {
-  if (historyIndex <= 0) return;
-  historyIndex--;
-  restoreHistory();
-};
-
-window.redo = () => {
-  if (historyIndex >= history.length - 1) return;
-  historyIndex++;
-  restoreHistory();
-};
+window.undo = () => { if (historyIndex > 0) { historyIndex--; restoreHistory(); } };
+window.redo = () => { if (historyIndex < history.length - 1) { historyIndex++; restoreHistory(); } };
 
 function restoreHistory() {
   foodsOnPyramid.forEach(f => f.remove());
   foodsOnPyramid = [];
-
   const state = history[historyIndex];
   const container = document.getElementById('pyramidContainer');
-
   state.forEach(item => {
     const el = document.createElement('div');
     el.style.position = 'absolute';
@@ -152,31 +141,23 @@ window.resetPyramid = () => {
 
 window.saveAsImage = async () => {
   try {
-    // Capture the whole page area including the title
-    const captureArea = document.body;   // or document.querySelector('.main') if you prefer
-    
-    const canvas = await html2canvas(captureArea, {
-      scale: 2.2,                    // Higher quality
-      backgroundColor: "#f0f7f0",
-      logging: false,
-      useCORS: true,
-      allowTaint: true
+    const canvas = await html2canvas(document.getElementById('export-wrapper'), { 
+      scale: 2.5,
+      backgroundColor: "#ffffff"
     });
-
     const link = document.createElement('a');
     link.download = 'My_Food_Pyramid.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
-    
     alert("✅ Image saved with title!");
   } catch (e) {
-    alert("Failed to save image. Please try again.");
+    alert("Failed to save image.");
   }
 };
 
 window.onload = () => {
   populateFoods();
-  setupDrop();
+  setupPyramidTap();
   history = [[]];
   historyIndex = 0;
 };
