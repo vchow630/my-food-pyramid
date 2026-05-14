@@ -32,7 +32,11 @@
       background: white; padding: 20px; border-radius: 16px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.15); width: 380px;
     }
-    .category h3 { margin: 12px 0 10px; color: #2e7d32; text-align: center; }
+    .category h3 { 
+      margin: 12px 0 10px; 
+      color: #2e7d32; 
+      text-align: center; 
+    }
     .foods { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
 
     .food-item {
@@ -52,19 +56,17 @@
 
     .controls {
       display: flex;
-      flex-direction: column;
+      flex-wrap: wrap;
       gap: 10px;
-      align-items: center;
-      margin-top: 20px;
+      justify-content: center;
     }
-    .controls button {
-      padding: 12px 24px;
+    button {
+      padding: 12px 20px;
       font-size: 16px;
       background: #2e7d32;
       color: white;
       border: none;
       border-radius: 8px;
-      width: 180px;
     }
   </style>
 </head>
@@ -76,6 +78,7 @@
       <div class="category"><h3>🥖 Carbohydrates</h3><div class="foods" id="carb"></div></div>
       <div class="category"><h3>🍗 Proteins</h3><div class="foods" id="protein"></div></div>
       <div class="category"><h3>🥦 Vegetables & Fruits</h3><div class="foods" id="veg"></div></div>
+      <div class="category"><h3>🍰 Others (Treats)</h3><div class="foods" id="others"></div></div>
     </div>
 
     <div>
@@ -94,16 +97,10 @@
       </div>
 
       <div class="controls">
-        <!-- First Row -->
-        <div style="display:flex; gap:10px;">
-          <button onclick="undo()">↩️ Undo</button>
-          <button onclick="redo()">↪️ Redo</button>
-        </div>
-        <!-- Second Row -->
-        <div style="display:flex; gap:10px;">
-          <button onclick="resetPyramid()">Reset All</button>
-          <button onclick="saveAsImage()">💾 Save Image</button>
-        </div>
+        <button onclick="undo()">↩️ Undo</button>
+        <button onclick="redo()">↪️ Redo</button>
+        <button onclick="resetPyramid()">Reset All</button>
+        <button onclick="saveAsImage()">💾 Save Image</button>
       </div>
     </div>
   </div>
