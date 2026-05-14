@@ -124,10 +124,8 @@ window.redo = () => {
 function restoreHistory() {
   foodsOnPyramid.forEach(f => f.remove());
   foodsOnPyramid = [];
-
   const state = history[historyIndex];
   const container = document.getElementById('pyramidContainer');
-
   state.forEach(item => {
     const el = document.createElement('div');
     el.style.position = 'absolute';
@@ -152,12 +150,12 @@ window.resetPyramid = () => {
 
 window.saveAsImage = async () => {
   try {
-    const canvas = await html2canvas(document.querySelector('.main'), { scale: 2.2 });
+    const canvas = await html2canvas(document.querySelector('.main'), { scale: 2.5 });
     const link = document.createElement('a');
     link.download = 'My_Food_Pyramid.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
-    alert("✅ Image saved!");
+    alert("✅ Image saved with title!");
   } catch (e) {
     alert("Failed to save image.");
   }
