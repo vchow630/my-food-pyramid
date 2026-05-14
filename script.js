@@ -1,3 +1,5 @@
+// ==================== MY FOOD PYRAMID ====================
+
 let selectedEmoji = null;
 let foodsOnPyramid = [];
 let history = [];
@@ -9,10 +11,12 @@ const foods = {
   veg: ["🥦","🥬","🥕","🍎","🍊","🍌","🍅","🥑"]
 };
 
+// Populate food palette
 function populateFoods() {
   Object.keys(foods).forEach(key => {
     const container = document.getElementById(key);
     container.innerHTML = '';
+    
     foods[key].forEach(emoji => {
       const div = document.createElement('div');
       div.className = 'food-item';
@@ -23,22 +27,27 @@ function populateFoods() {
   });
 }
 
+// Select food from palette
 function selectEmoji(emoji, element) {
   document.querySelectorAll('.food-item').forEach(el => el.classList.remove('selected'));
   element.classList.add('selected');
   selectedEmoji = emoji;
 }
 
+// Tap on pyramid to place food
 function setupPyramidTap() {
   const container = document.getElementById('pyramidContainer');
+  
   container.addEventListener('click', (e) => {
     if (!selectedEmoji) {
       alert("Please tap a food from the left first!");
       return;
     }
+
     const rect = container.getBoundingClientRect();
     const x = e.clientX - rect.left - 22;
     const y = e.clientY - rect.top - 22;
+
     addFood(selectedEmoji, x, y);
   });
 }
@@ -98,6 +107,7 @@ function makeDraggable(el) {
   });
 }
 
+// History System
 function saveHistory() {
   const state = foodsOnPyramid.map(food => ({
     emoji: food.textContent,
@@ -124,8 +134,10 @@ window.redo = () => {
 function restoreHistory() {
   foodsOnPyramid.forEach(f => f.remove());
   foodsOnPyramid = [];
+
   const state = history[historyIndex];
   const container = document.getElementById('pyramidContainer');
+
   state.forEach(item => {
     const el = document.createElement('div');
     el.style.position = 'absolute';
@@ -150,24 +162,18 @@ window.resetPyramid = () => {
 
 window.saveAsImage = async () => {
   try {
-    // Capture the export wrapper which includes the title
-    const canvas = await html2canvas(document.getElementById('export-wrapper'), { 
-      scale: 2.5,
-      backgroundColor: "#ffffff",
-      logging: false
-    });
-
+    const canvas = await html2canvas(document.querySelector('.main'), { scale: 2.2 });
     const link = document.createElement('a');
     link.download = 'My_Food_Pyramid.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
-    
-    alert("✅ Image saved with title!");
+    alert("✅ Image saved!");
   } catch (e) {
-    alert("Failed to save image. Please try again.");
+    alert("Failed to save image.");
   }
 };
 
+// Initialize everything
 window.onload = () => {
   populateFoods();
   setupPyramidTap();
