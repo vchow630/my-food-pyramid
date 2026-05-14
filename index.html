@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>My Food Pyramid</title>
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   
@@ -32,11 +32,7 @@
       background: white; padding: 20px; border-radius: 16px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.15); width: 380px;
     }
-    .category h3 { 
-      margin: 12px 0 10px; 
-      color: #2e7d32; 
-      text-align: center; 
-    }
+    .category h3 { margin: 12px 0 10px; color: #2e7d32; text-align: center; }
     .foods { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
 
     .food-item {
@@ -56,17 +52,19 @@
 
     .controls {
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
       gap: 10px;
-      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
     }
-    button {
-      padding: 12px 20px;
+    .controls button {
+      padding: 12px 24px;
       font-size: 16px;
       background: #2e7d32;
       color: white;
       border: none;
       border-radius: 8px;
+      width: 180px;
     }
   </style>
 </head>
@@ -96,11 +94,16 @@
         </div>
       </div>
 
+      <!-- Buttons in 2 rows -->
       <div class="controls">
-        <button onclick="undo()">↩️ Undo</button>
-        <button onclick="redo()">↪️ Redo</button>
-        <button onclick="resetPyramid()">Reset All</button>
-        <button onclick="saveAsImage()">💾 Save Image</button>
+        <div style="display:flex; gap:10px;">
+          <button onclick="undo()">↩️ Undo</button>
+          <button onclick="redo()">↪️ Redo</button>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button onclick="resetPyramid()">Reset All</button>
+          <button onclick="saveAsImage()">💾 Save Image</button>
+        </div>
       </div>
     </div>
   </div>
